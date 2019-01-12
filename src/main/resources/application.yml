@@ -17,25 +17,20 @@ spring:
     password: 111111
     driver-class-name: com.mysql.jdbc.Driver
     
-  redis:
-    host: 127.0.0.1
-    port: 16379
-    database: 1
-    password: Ddc@2018
-    jedis:
-      pool:
-        max-active: 100
-        min-idle: 10
-        max-idle: 100
-        max-wait: 1000ms
-    
 mybatis:
   mapper-locations: classpath:mapping/*Mapper.xml
   type-aliases-package: com.lizp.sec.cache.entity
   configuration:
     map-underscore-to-camel-case: true
     
-    
+redis:
+  host: 127.0.0.1
+  port: 16379
+  password: Ddc@2018
+  timeout: 3
+  poolMaxTotal: 10
+  poolMaxIdle: 10
+  poolMaxWait: 3
     
     
     
