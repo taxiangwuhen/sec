@@ -5,13 +5,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.lizp.sec.cache.config.ItemPrefixKey;
 import com.lizp.sec.cache.config.RedisService;
 import com.lizp.sec.cache.entity.Item;
 import com.lizp.sec.cache.entity.ItemTag;
 import com.lizp.sec.cache.service.ItemService;
 import com.lizp.sec.cache.service.ItemTagService;
 import com.lizp.sec.cache.util.CodeMsg;
-import com.lizp.sec.cache.util.ItemRedis;
 import com.lizp.sec.cache.util.Result;
 
 
@@ -61,7 +61,7 @@ public class ItemApiController {
 		a.setType(1);
 		a.setState(1);
 		a.setName("蜜淘日志");
-		redisService.set(ItemRedis.getItemTagById, id.toString(), a);
+		redisService.set(ItemPrefixKey.getItemTagById, id.toString(), a);
 		
 		
 		//ItemTag b = redisService.get("xxx", a.getClass());

@@ -31,12 +31,19 @@ public class RedisService {
 				// 将实体转化成json
 				String json = beanToStr(t);
 				
+				String realKey = preKeyVal+key;
+				int expireSeconds = preKey.getExpireSeconds();
+				
 				// 异常判断
-				if(StringUtils.isEmpty(preKeyVal+key) || null == t){
+				if(StringUtils.isEmpty(realKey) || null == t){
 					return false;
 				}
 				
-				jedis.set(preKeyVal+key, json);
+				if(preKey.getExpireSeconds() <=0) {
+					jedis.set(realKey, json);
+				}else {
+					jedis.setex(realKey, expireSeconds, json);	
+				}
 				
 				return true;
 			}catch (Exception e) {
@@ -58,7 +65,9 @@ public class RedisService {
 				jedis = jedisPool.getResource();
 		
 				String preKeyVal = preKey.getPreKey();
-				String val= jedis.get(preKeyVal+key);
+				String realKey = preKeyVal+key;
+				
+				String val= jedis.get(realKey);
 				
 				// 将实体转化成json
 				T obj = strToBean(val, clazz);
@@ -83,8 +92,10 @@ public class RedisService {
 				jedis = jedisPool.getResource();
 				
 				String preKeyVal = preKey.getPreKey();
+				String realKey = preKeyVal+key;
+				
 		
-				boolean val = jedis.exists(preKeyVal+key);
+				boolean val = jedis.exists(realKey);
 				
 				return val;
 			}catch (Exception e) {
