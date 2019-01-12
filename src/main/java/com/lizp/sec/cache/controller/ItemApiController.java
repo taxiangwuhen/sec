@@ -11,6 +11,7 @@ import com.lizp.sec.cache.entity.Item;
 import com.lizp.sec.cache.entity.ItemTag;
 import com.lizp.sec.cache.service.ItemService;
 import com.lizp.sec.cache.service.ItemTagService;
+import com.lizp.sec.cache.service.StockService;
 import com.lizp.sec.cache.util.CodeMsg;
 import com.lizp.sec.cache.util.Result;
 
@@ -24,6 +25,9 @@ public class ItemApiController {
 	
 	@Autowired
 	private ItemTagService itemTagService;
+	
+	@Autowired
+	private StockService stockService;
 	
 	@Autowired
 	private RedisService redisService;
@@ -69,6 +73,11 @@ public class ItemApiController {
 		//System.out.println(JSON.toJSONString(b));
 		
 		return Result.succ(a);
+	} 
+	
+	@RequestMapping("/lock/{id}")
+	public Result<Integer> lock(@PathVariable Long id) {
+		return stockService.subStock(id, 1);
 	} 
 	
 }

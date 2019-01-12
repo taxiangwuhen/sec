@@ -1,5 +1,7 @@
 package com.lizp.sec.cache.config;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.util.StringUtils;
@@ -105,6 +107,37 @@ public class RedisService {
 				returnToPool(jedis);
 			}
 	}
+	
+    public Object eval(String script, List<String> keys, List<String> args) {
+        Jedis jedis = jedisPool.getResource();
+        try {
+            Object result = jedis.eval(script, keys, args);
+            return result;
+        } catch (Exception ex) {
+           System.out.println("117=="+ex);
+        	return null;
+        } finally {
+        	returnToPool(jedis);
+        }
+    }
+    
+	public Long delete(ItemPrefixKey preKey, String cacheKey) {
+		Jedis jedis = null;
+		try{
+			jedis = jedisPool.getResource();
+			
+			String preKeyVal = preKey.getPreKey();
+			String realKey = preKeyVal+cacheKey;
+			
+			return jedis.del(realKey);
+		}catch (Exception e) {
+			return -1l;
+		}
+		finally {
+			returnToPool(jedis);
+		}
+		
+	}
 
 	// 将实体类转化成字符串，兼容Integer、Long、String、T
 	private <T> String beanToStr(T t) {
@@ -143,6 +176,8 @@ public class RedisService {
 			 jedis.close();
 		 }
 	}
+
+
 	
 	
 }
