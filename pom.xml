@@ -49,7 +49,7 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-devtools</artifactId>
             <optional>true</optional>
-            <scope>true</scope>
+            <scope>test</scope>
         </dependency>
 
         <!--spring模板引擎-->
@@ -82,6 +82,28 @@
 		    <artifactId>fastjson</artifactId>
 		    <version>1.2.38</version>
 		</dependency>
+		
+	   <!-- md5 -->
+		<dependency>
+			<groupId>commons-codec</groupId>
+			<artifactId>commons-codec</artifactId>
+		</dependency>
+		
+		 <!-- spring的字符串处理工具-->
+		<dependency>
+		    <groupId>org.apache.commons</groupId>
+		    <artifactId>commons-lang3</artifactId>
+		    <version>3.6</version>
+		</dependency>
+		
+		<!-- spring的校验器-->
+		
+		<dependency>
+			<groupId>org.springframework.boot</groupId>
+	        <artifactId>spring-boot-starter-validation</artifactId>
+	        <version>2.0.1.RELEASE</version>
+		</dependency>
+		
   </dependencies>
   
     <build>

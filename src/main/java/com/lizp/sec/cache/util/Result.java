@@ -15,6 +15,10 @@ public class Result<T> {
 		return new Result<T>(CodeMsg.succ, data);
 	}
 	
+	public static <T> Result exception(T data) {
+		return new Result<T>(CodeMsg.exception, data);
+	}
+	
 	private Result(CodeMsg cm ,T data) {
 		if(null == cm) {
 			return;

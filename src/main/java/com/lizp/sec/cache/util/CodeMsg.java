@@ -8,6 +8,7 @@ public class CodeMsg {
 	
 	public static CodeMsg succ = new CodeMsg(1, "操作成功");
 	public static CodeMsg fail = new CodeMsg(0, "操作失败");
+	public static CodeMsg exception = new CodeMsg(-1, "操作异常:%s");
 	
 	private CodeMsg(Integer code, String msg) {
 		super();
@@ -26,6 +27,12 @@ public class CodeMsg {
 	}
 	public void setMsg(String msg) {
 		this.msg = msg;
+	}
+	
+	public CodeMsg fillArg(Object... arg){
+		int code = this.code;
+		String mString = String.format(msg, arg);
+		return new CodeMsg(code, mString);
 	}
 	
 	
