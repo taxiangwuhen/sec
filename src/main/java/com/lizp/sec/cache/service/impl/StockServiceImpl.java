@@ -10,6 +10,7 @@ import org.springframework.stereotype.Service;
 
 import com.lizp.sec.cache.config.ItemPrefixKey;
 import com.lizp.sec.cache.config.RedisService;
+import com.lizp.sec.cache.exception.GlobalException;
 import com.lizp.sec.cache.service.StockService;
 import com.lizp.sec.cache.util.CodeMsg;
 import com.lizp.sec.cache.util.Result;
@@ -120,6 +121,18 @@ public class StockServiceImpl implements StockService {
     private void unLockLoadSkStock(Long skId) {
         String cacheKey = ItemPrefixKey.PROM_SK_STOCK_LOAD_LOCK.replace("{skId}", skId.toString());
         redisService.delete(ItemPrefixKey.getItemTagById,cacheKey+"locked");
+    }
+    
+    public void throwsException() {
+    	try {
+    		Thread.sleep(200);
+    		String[] args = "".split(",");
+    		System.out.println("args[1]="+args[1]);
+    	}catch (Exception e) {
+			throw new GlobalException(CodeMsg.exception.fillArg(e));
+		}
+    	
+    	
     }
 
 	
