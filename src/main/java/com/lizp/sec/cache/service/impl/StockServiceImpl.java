@@ -10,10 +10,12 @@ import org.springframework.stereotype.Service;
 
 import com.lizp.sec.cache.config.ItemPrefixKey;
 import com.lizp.sec.cache.config.RedisService;
+import com.lizp.sec.cache.config.UserPrefixKey;
 import com.lizp.sec.cache.exception.GlobalException;
 import com.lizp.sec.cache.service.StockService;
 import com.lizp.sec.cache.util.CodeMsg;
 import com.lizp.sec.cache.util.Result;
+import com.lizp.sec.cache.vo.LoginVo;
 
 
 @Service
@@ -134,6 +136,23 @@ public class StockServiceImpl implements StockService {
     	
     	
     }
+
+	@Override
+	public Object getCook(String val) {
+		LoginVo user = redisService.get(UserPrefixKey.sessionId, val, LoginVo.class);
+	
+		// 延长过期时间
+		
+		return user;
+	}
+
+	@Override
+	public void setCook(String randomVal, LoginVo login) {
+		redisService.set(UserPrefixKey.sessionId, randomVal, login);
+	}
+    
+	
+    
 
 	
 }

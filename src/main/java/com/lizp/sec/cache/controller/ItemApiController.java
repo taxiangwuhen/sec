@@ -1,6 +1,8 @@
 package com.lizp.sec.cache.controller;
 
-import javax.validation.Valid;
+import javax.servlet.http.Cookie;
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -8,6 +10,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.alibaba.fastjson.JSONObject;
 import com.lizp.sec.cache.config.ItemPrefixKey;
 import com.lizp.sec.cache.config.RedisService;
 import com.lizp.sec.cache.entity.Item;
@@ -17,6 +20,7 @@ import com.lizp.sec.cache.service.ItemTagService;
 import com.lizp.sec.cache.service.StockService;
 import com.lizp.sec.cache.util.CodeMsg;
 import com.lizp.sec.cache.util.Result;
+import com.lizp.sec.cache.util.UUIDUtil;
 import com.lizp.sec.cache.vo.LoginVo;
 
 
@@ -84,9 +88,33 @@ public class ItemApiController {
 		return stockService.subStock(id, 1);
 	} 
 	
-	@GetMapping("/login/{id}")
-	public Result<Boolean> lock(LoginVo login) {
-		stockService.throwsException();
+	@GetMapping("/login/{mobile}")
+	public Result<Boolean> login(HttpServletRequest req, 
+			HttpServletResponse response,
+			@PathVariable String mobile) {
+		//stockService.throwsException();
+		LoginVo login = new LoginVo();
+		login.setMobile(mobile);
+		addCookie(req, response, login);
+		
+
+		return Result.succ(true);
+	} 
+	
+
+	private void addCookie(HttpServletRequest req, HttpServletResponse response, LoginVo login) {
+		String randomVal = UUIDUtil.getUUIDString();
+		Cookie cookie = new Cookie("token", randomVal);
+		cookie.setPath("/");
+		cookie.setMaxAge(60*5);// 5分钟
+		response.addCookie(cookie);
+		
+		stockService.setCook(randomVal, login);
+	}
+
+	@GetMapping("/cookie/get")
+	public Result<Boolean> cookie(LoginVo login) {
+		System.out.println("111="+JSONObject.toJSONString(login));
 		return Result.succ(true);
 	} 
 	
